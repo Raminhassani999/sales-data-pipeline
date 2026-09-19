@@ -1,9 +1,9 @@
 import pandas as pd
 
+from extract import extract_sales_data
 
-def transform_sales_data(input_file: str) -> pd.DataFrame:
-    df = pd.read_csv(input_file)
 
+def transform_sales_data(df: pd.DataFrame) -> pd.DataFrame:
     df["order_date"] = pd.to_datetime(df["order_date"])
 
     df["total_amount"] = df["quantity"] * df["price"]
@@ -12,8 +12,8 @@ def transform_sales_data(input_file: str) -> pd.DataFrame:
 
 
 if __name__ == "__main__":
-    input_file = "data/raw/sales.csv"
+    df = extract_sales_data("data/raw/sales.csv")
 
-    df = transform_sales_data(input_file)
+    df = transform_sales_data(df)
 
     print(df)
