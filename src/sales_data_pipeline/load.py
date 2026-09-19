@@ -1,14 +1,13 @@
+import os
+
 import pandas as pd
 from sqlalchemy import create_engine
 
-from sales_data_pipeline.extract import extract_sales_data
-from sales_data_pipeline.transform import transform_sales_data
 
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-DATABASE_URL = (
-    "postgresql+psycopg2://"
-    "sales_user:sales_password@localhost:5433/sales_db"
-)
+if not DATABASE_URL:
+    raise ValueError("DATABASE_URL environment variable is not set")
 
 
 def load_sales_data(df: pd.DataFrame):
@@ -25,8 +24,6 @@ def load_sales_data(df: pd.DataFrame):
 
 
 if __name__ == "__main__":
-    df = extract_sales_data("data/raw/sales.csv")
-
-    df = transform_sales_data(df)
+    df = pd.read_csv("transformed_sales.csv")
 
     load_sales_data(df)

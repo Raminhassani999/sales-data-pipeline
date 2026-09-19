@@ -1,0 +1,9 @@
+order_id,customer,product,quantity,price,order_date
+1001,Alice,Laptop,1,899.99,2026-09-01
+1002,Bob,Mouse,2,24.99,2026-09-01
+1003,Sara,Keyboard,1,79.99,2026-09-02
+1004,Marco,Monitor,2,249.99,2026-09-02
+1005,Alice,Mouse,3,24.99,2026-09-03
+1006,Bob,Laptop,1,899.99,2026-09-03
+1007,Sara,Monitor,1,249.99,2026-09-04
+1008,Marco,Keyboard,2,79.99,2026-09-04
