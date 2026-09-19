@@ -1,8 +1,8 @@
 import pandas as pd
 from sqlalchemy import create_engine
 
-from extract import extract_sales_data
-from transform import transform_sales_data
+from sales_data_pipeline.extract import extract_sales_data
+from sales_data_pipeline.transform import transform_sales_data
 
 
 DATABASE_URL = (

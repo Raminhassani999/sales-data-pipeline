@@ -1,6 +1,6 @@
 import pandas as pd
 
-from extract import extract_sales_data
+from sales_data_pipeline.extract import extract_sales_data
 
 
 def transform_sales_data(df: pd.DataFrame) -> pd.DataFrame:
