@@ -1,0 +1,21 @@
+[project]
+name = "sales-data-pipeline"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Ramin Hassani", email = "raminrst999@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "pandas>=3.0.6",
+    "psycopg2-binary>=2.9.13",
+    "sqlalchemy>=2.0.54",
+]
+
+[project.scripts]
+sales-data-pipeline = "sales_data_pipeline:main"
+
+[build-system]
+requires = ["uv_build>=0.12.13,<0.13.0"]
+build-backend = "uv_build"
