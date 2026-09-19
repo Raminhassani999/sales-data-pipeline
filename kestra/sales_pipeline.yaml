@@ -1,0 +1,84 @@
+id: sales_pipeline
+namespace: sales
+
+tasks:
+
+  - id: extract
+    type: io.kestra.plugin.scripts.python.Commands
+
+    namespaceFiles:
+      enabled: true
+      include:
+        - data/sales.csv
+        - scripts/sales_data_pipeline/__init__.py
+        - scripts/sales_data_pipeline/extract.py
+
+    taskRunner:
+      type: io.kestra.plugin.scripts.runner.docker.Docker
+      networkMode: sales-network
+
+    containerImage: python:3.13-slim
+
+    env:
+      INPUT_FILE: "data/sales.csv"
+
+    beforeCommands:
+      - pip install pandas
+
+    commands:
+      - python scripts/sales_data_pipeline/extract.py
+
+    outputFiles:
+      - extracted_sales.csv
+
+  - id: transform
+    type: io.kestra.plugin.scripts.python.Commands
+
+    taskRunner:
+      type: io.kestra.plugin.scripts.runner.docker.Docker
+      networkMode: sales-network
+
+    containerImage: python:3.13-slim
+
+    inputFiles:
+      extracted_sales.csv: "{{ outputs.extract.outputFiles['extracted_sales.csv'] }}"
+
+    namespaceFiles:
+      enabled: true
+      include:
+        - scripts/sales_data_pipeline/transform.py
+
+    beforeCommands:
+      - pip install pandas
+
+    commands:
+      - python scripts/sales_data_pipeline/transform.py
+
+    outputFiles:
+      - transformed_sales.csv
+
+  - id: load
+    type: io.kestra.plugin.scripts.python.Commands
+
+    taskRunner:
+      type: io.kestra.plugin.scripts.runner.docker.Docker
+      networkMode: sales-network
+
+    containerImage: python:3.13-slim
+
+    inputFiles:
+      transformed_sales.csv: "{{ outputs.transform.outputFiles['transformed_sales.csv'] }}"
+
+    namespaceFiles:
+      enabled: true
+      include:
+        - scripts/sales_data_pipeline/load.py
+
+    env:
+      DATABASE_URL: "postgresql+psycopg2://sales_user:sales_password@sales-postgres:5432/sales_db"
+
+    beforeCommands:
+      - pip install pandas sqlalchemy psycopg2-binary
+
+    commands:
+      - python scripts/sales_data_pipeline/load.py
